@@ -692,24 +692,24 @@
             const livedInauthentically = path.includes(14);
             
             if (exploredAlone && keptSecrets && !cameOut) {
-                pathAnalysis = `Your journey took you through isolation and secrecy. You chose to explore privately and keep your identity hidden, which reveals how the fear of consequences—shaped by your ${cultureText[gameState.culture]} background and ${expectationText[gameState.familyExpectation - 1]} family expectations—led you to choose safety over authenticity. This wasn't a free choice; it was a survival strategy.`;
+                pathAnalysis = `Your journey took you through isolation and secrecy. You chose to explore privately and keep your identity hidden, which reveals how the fear of consequences, shaped by your ${cultureText[gameState.culture]} background and ${expectationText[gameState.familyExpectation - 1]} family expectations, led you to choose safety over authenticity. This wasn't a free choice; it was a survival strategy.`;
             } else if (soughtTherapy && cameOut) {
-                pathAnalysis = `You sought professional help and ultimately chose to come out. This path shows courage, but also reveals how much support and resources matter. Your ability to access therapy and take the risk of coming out was shaped by your background—some have these options, others don't. Your journey highlights both individual agency and structural privilege.`;
+                pathAnalysis = `You sought professional help and ultimately chose to come out. This path shows courage, but also reveals how much support and resources matter. Your ability to access therapy and take the risk of coming out was shaped by your background. Some have these options, others don't. Your journey highlights both individual agency and structural privilege.`;
             } else if (talkedToFriend && joinedCommunity) {
                 pathAnalysis = `You found support through friends and community. This path shows the importance of chosen family and community support, but also reveals how access to accepting communities varies dramatically based on geography, culture, and social networks. Your ability to find this support was shaped by factors beyond your control.`;
             } else if (livedInauthentically) {
-                pathAnalysis = `Your journey led you to continue living inauthentically, conforming to expectations. This path powerfully demonstrates how "choice" becomes meaningless when the alternative means losing everything. Your decision to conform wasn't weakness—it was a response to structural constraints that made authenticity too costly.`;
+                pathAnalysis = `Your journey led you to continue living inauthentically, conforming to expectations. This path powerfully demonstrates how "choice" becomes meaningless when the alternative means losing everything. Your decision to conform wasn't weakness. It was a response to structural constraints that made authenticity too costly.`;
             } else if (exploredAlone && !soughtTherapy) {
-                pathAnalysis = `You navigated this journey largely alone, without professional support. This path reveals how access to resources—therapy, support groups, safe spaces—is not equally available to everyone. Your gender, culture, and family background shaped not just your choices, but your access to the tools that could help you navigate them.`;
+                pathAnalysis = `You navigated this journey largely alone, without professional support. This path reveals how access to resources like therapy, support groups, and safe spaces is not equally available to everyone. Your gender, culture, and family background shaped not just your choices, but your access to the tools that could help you navigate them.`;
             } else {
-                pathAnalysis = `Your specific path through this narrative reveals unique intersections of constraint and possibility. The choices you made were shaped by the options available to you—options that were themselves determined by your gender, culture, and family expectations. Every decision point in your journey was filtered through these social structures.`;
+                pathAnalysis = `Your specific path through this narrative reveals unique intersections of constraint and possibility. The choices you made were shaped by the options available to you, options that were themselves determined by your gender, culture, and family expectations. Every decision point in your journey was filtered through these social structures.`;
             }
             
             // Final reflection based on combination
             if (gameState.culture === 'conservative' && gameState.familyExpectation === 3) {
-                finalReflection = `Your specific combination—${genderText[gameState.gender]} in a conservative religious environment with high family expectations—created particularly severe constraints. The intersection of gender norms, religious teachings, and family pressure created a narrow path where authenticity came at enormous cost. Your journey highlights how these forces compound, making "personal choice" almost impossible.`;
+                finalReflection = `Your specific combination of being a ${genderText[gameState.gender]} in a conservative religious environment with high family expectations created particularly severe constraints. The intersection of gender norms, religious teachings, and family pressure created a narrow path where authenticity came at enormous cost. Your journey highlights how these forces compound, making "personal choice" almost impossible.`;
             } else if (gameState.culture === 'liberal' && gameState.familyExpectation === 1) {
-                finalReflection = `Your combination—${genderText[gameState.gender]} in a liberal secular environment with low family expectations—gave you more privilege than most. You had more freedom to explore, but this journey has shown you how even in accepting environments, social structures still shape identity and choice. Recognizing this privilege is crucial for understanding the struggles of those with less freedom.`;
+                finalReflection = `Your combination of being a ${genderText[gameState.gender]} in a liberal secular environment with low family expectations gave you more privilege than most. You had more freedom to explore, but this journey has shown you how even in accepting environments, social structures still shape identity and choice. Recognizing this privilege is crucial for understanding the struggles of those with less freedom.`;
             } else {
                 finalReflection = `Your specific combination of background factors created a unique landscape of constraints and possibilities. The intersection of your gender, culture, and family expectations shaped not just your options, but your understanding of what was even possible. This reveals how personal choice is always contextual, always shaped by forces beyond individual will.`;
             }
@@ -722,7 +722,7 @@
                 <p><strong>How Family Expectations Created Consequences:</strong> ${expectationImpact}</p>
                 <p><strong>Your Specific Journey:</strong> ${pathAnalysis}</p>
                 <p><strong>What This Reveals:</strong> ${finalReflection}</p>
-                <p>This narrative isn't about individual failure or success. It's about recognizing that sexuality and identity are shaped by forces beyond personal will. True freedom requires not just individual courage, but social change—challenging the structures that make authenticity a privilege rather than a right.</p>
+                <p>This narrative isn't about individual failure or success. It's about recognizing that sexuality and identity are shaped by forces beyond personal will. True freedom requires not just individual courage, but social change that challenges the structures that make authenticity a privilege rather than a right.</p>
             `;
             
             document.getElementById('story-text').parentNode.insertBefore(summary, document.getElementById('story-text').nextSibling);
