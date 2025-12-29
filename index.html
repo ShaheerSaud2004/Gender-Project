@@ -207,6 +207,10 @@
     <div class="container">
         <h1>Choices: A Narrative Journey</h1>
         <p class="subtitle">Explore how personal choices are shaped by social forces</p>
+        <p style="text-align: center; color: #888; font-size: 0.85em; font-style: italic; margin-bottom: 20px; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+            Final Project for 01:988:101 - Introduction to Gender, Race, and Sexuality<br>
+            By Shaheer Saud
+        </p>
 
         <!-- Character Selection Form -->
         <div id="character-selection">
@@ -499,9 +503,45 @@
                 ]
             },
             {
-                // Node 15: Ending/Reflection
+                // Node 15: Ending/Reflection - Different endings based on background
                 getText: (state) => {
-                    return 'Your journey reaches a point of reflection.';
+                    // Different endings based on combinations of gender, culture, and family expectation
+                    if (state.culture === 'conservative' && state.familyExpectation === 3) {
+                        if (state.gender === 'woman') {
+                            return 'Years have passed. You look back on your journey and realize how deeply your choices were constrained. As a woman in a conservative religious environment with high family expectations, the "choices" you made were often the only safe options available. The cost of authenticity was too high—family rejection, social ostracization, loss of community. You see now that what appeared to be personal decisions were actually survival strategies shaped by forces beyond your control.';
+                        } else if (state.gender === 'man') {
+                            return 'Looking back, you see how your identity as a man in a conservative religious community with high family expectations created a narrow path. The pressure to conform, to maintain honor, to fulfill masculine roles—these weren\'t choices you made freely. They were expectations you navigated, often at the cost of your authentic self. The structures around you determined what was possible.';
+                        } else {
+                            return 'Your journey as a non-binary person in a conservative religious environment with high family expectations has been particularly challenging. The binary structures of your culture and religion left little room for your identity. Every "choice" was actually a negotiation between authenticity and safety, between being yourself and maintaining relationships. You realize how much privilege others have in having their identity recognized.';
+                        }
+                    } else if (state.culture === 'conservative' && state.familyExpectation === 2) {
+                        if (state.gender === 'woman') {
+                            return 'Reflecting on your path, you see how being a woman in a conservative environment with moderate family expectations created a complex landscape. You had some room to explore, but always within boundaries. The fear of judgment, the weight of cultural expectations, the pressure to maintain modesty and honor—these shaped every decision. Your "choices" were made within a framework you didn\'t create.';
+                        } else {
+                            return 'Your journey reveals the subtle ways conservative culture and moderate family expectations constrained your options. You had more freedom than some, but still navigated a world where certain identities and expressions were unacceptable. The choices you made were always calculated against potential consequences.';
+                        }
+                    } else if (state.culture === 'moderate' && state.familyExpectation >= 2) {
+                        if (state.gender === 'non-binary') {
+                            return 'As a non-binary person navigating moderate traditional culture with significant family expectations, you\'ve experienced the constant work of explaining and justifying your identity. The world assumes binary gender, and every interaction requires you to navigate that assumption. Your "choices" about how to present yourself, who to tell, how to live—all shaped by a society that doesn\'t recognize you.';
+                        } else {
+                            return 'Your moderate traditional background with significant family expectations created a middle ground—not as restrictive as conservative environments, but still bound by tradition. You had more options than some, but every choice carried the weight of family judgment and cultural norms. The freedom to choose was always conditional.';
+                        }
+                    } else if (state.culture === 'liberal') {
+                        if (state.gender === 'non-binary') {
+                            return 'Even in a liberal secular environment, your journey as a non-binary person has revealed structural barriers. While you faced less explicit discrimination, you still navigated a world built for binary gender—forms, spaces, language, expectations. Your "choices" were easier than for others, but you recognize the privilege and the work still needed for true inclusion.';
+                        } else if (state.familyExpectation === 1) {
+                            return 'Your liberal secular background with low family expectations gave you more freedom than many. You recognize this privilege—the ability to explore your identity without fear of severe consequences. But even here, you\'ve seen how gender norms, social expectations, and cultural assumptions shaped your understanding of what was possible. True freedom requires recognizing these invisible constraints.';
+                        } else {
+                            return 'Even in a more accepting environment, family expectations and gender norms still shaped your journey. You had more options than those in restrictive environments, but you see how your choices were still influenced by social structures, media representations, and cultural assumptions about identity and relationships.';
+                        }
+                    } else {
+                        // Low family expectation, moderate/liberal culture
+                        if (state.gender === 'woman') {
+                            return 'As a woman with lower family expectations in a more accepting environment, you\'ve had more space to explore. But you\'ve still encountered gender-based assumptions, double standards, and expectations about femininity, relationships, and sexuality. Your "choices" were freer, but still shaped by gendered social structures.';
+                        } else {
+                            return 'Your journey with lower family expectations in a more accepting environment has been easier than many. You recognize this privilege while also seeing how social structures—gender norms, cultural assumptions, media representations—still shaped your understanding of identity and possibility.';
+                        }
+                    }
                 },
                 choices: []
             }
@@ -571,7 +611,7 @@
             renderNode(nextNode);
         }
 
-        // Show reflective summary at the end
+        // Show reflective summary at the end - personalized based on selections
         function showSummary() {
             const choicesContainer = document.getElementById('choices');
             choicesContainer.innerHTML = '';
@@ -593,12 +633,91 @@
             
             const expectationText = ['low', 'medium', 'high'];
             
+            // Generate personalized summary based on specific combinations
+            let genderImpact = '';
+            let cultureImpact = '';
+            let expectationImpact = '';
+            let finalReflection = '';
+            
+            // Gender-specific impacts
+            if (gameState.gender === 'woman') {
+                if (gameState.culture === 'conservative') {
+                    genderImpact = `As a woman in a conservative religious environment, you faced specific constraints around modesty, purity, and honor. Your gender meant that your choices were constantly judged against standards of femininity and family honor. The risks you faced—social ostracization, family rejection, violence—were gendered. Your identity as a woman fundamentally shaped what was considered acceptable and what carried severe consequences.`;
+                } else {
+                    genderImpact = `As a woman, you navigated gendered expectations about relationships, sexuality, and identity. Even in more accepting environments, you encountered double standards, assumptions about femininity, and expectations about your role. Your gender identity shaped how others perceived your choices and what risks you could safely take.`;
+                }
+            } else if (gameState.gender === 'man') {
+                if (gameState.culture === 'conservative') {
+                    genderImpact = `As a man in a conservative religious environment, you faced expectations around masculinity, honor, and leadership. Your gender meant that certain expressions of identity were seen as threats to your masculinity. The pressure to conform to masculine roles and maintain family honor shaped every decision. Your identity as a man created specific constraints around what you could explore safely.`;
+                } else {
+                    genderImpact = `As a man, you navigated expectations around masculinity and strength. Even in more accepting environments, you encountered assumptions about what men should be, how they should express themselves, and what relationships are appropriate. Your gender identity shaped the social costs of your choices.`;
+                }
+            } else {
+                genderImpact = `As a non-binary person, you navigated a world built for binary gender. Every form, every space, every interaction assumed you were either a man or a woman. Your identity required constant explanation and justification. The structures around you—language, institutions, social norms—didn't recognize you, making every "choice" about identity an act of resistance against systems that erase you.`;
+            }
+            
+            // Culture-specific impacts
+            if (gameState.culture === 'conservative') {
+                cultureImpact = `Your conservative religious background created a framework where certain identities and expressions were not just discouraged, but considered sinful or dishonorable. Religious teachings, cultural norms, and community values didn't just influence you—they fundamentally limited what you could safely explore. The threat of religious condemnation, community exclusion, and family shame shaped every decision. Your "choices" were made within boundaries defined by faith and tradition.`;
+            } else if (gameState.culture === 'moderate') {
+                cultureImpact = `Your moderate traditional background created a middle ground—more flexible than conservative environments, but still bound by tradition and cultural expectations. You had more room to explore, but always within certain boundaries. Cultural norms about appropriate behavior, relationships, and identity still shaped your understanding of what was possible. Your choices were freer, but still constrained by tradition.`;
+            } else {
+                cultureImpact = `Your liberal secular background provided more acceptance and fewer explicit restrictions. However, even here, cultural assumptions, media representations, and social norms shaped your understanding of identity and relationships. You had more privilege than those in restrictive environments, but you still navigated structures that assumed certain norms about gender, sexuality, and identity.`;
+            }
+            
+            // Family expectation impacts
+            if (gameState.familyExpectation === 3) {
+                expectationImpact = `With high family expectations, every choice carried the weight of potential family rejection, disappointment, or loss. The "freedom" to choose was always conditional—you could be yourself, but at the cost of relationships that were supposed to be unconditional. Family honor, tradition, and expectations created consequences that made authenticity feel like betrayal. Your choices were survival strategies, not free expressions of self.`;
+            } else if (gameState.familyExpectation === 2) {
+                expectationImpact = `With medium family expectations, you navigated a complex landscape. You had some room to explore, but always aware of potential family judgment or disappointment. The fear of letting down your family, of breaking tradition, of causing conflict shaped your decisions. Your choices were made with family consequences in mind, limiting your sense of freedom.`;
+            } else {
+                expectationImpact = `With low family expectations, you had more freedom than many. Your family's acceptance or at least tolerance gave you space to explore. However, you still navigated social expectations, cultural norms, and structural barriers. Even with family support, the broader social structures around gender, culture, and identity shaped your options and understanding.`;
+            }
+            
+            // Analyze the path taken to personalize the journey reflection
+            let pathAnalysis = '';
+            const path = gameState.path;
+            
+            // Check which key decisions were made
+            const exploredAlone = path.includes(1) || path.includes(4);
+            const talkedToFriend = path.includes(2) || path.includes(5);
+            const soughtTherapy = path.includes(3) || path.includes(7);
+            const keptSecrets = path.includes(5) || path.includes(9);
+            const cameOut = path.includes(10);
+            const joinedCommunity = path.includes(8) || path.includes(13);
+            const livedInauthentically = path.includes(14);
+            
+            if (exploredAlone && keptSecrets && !cameOut) {
+                pathAnalysis = `Your journey took you through isolation and secrecy. You chose to explore privately and keep your identity hidden, which reveals how the fear of consequences—shaped by your ${cultureText[gameState.culture]} background and ${expectationText[gameState.familyExpectation - 1]} family expectations—led you to choose safety over authenticity. This wasn't a free choice; it was a survival strategy.`;
+            } else if (soughtTherapy && cameOut) {
+                pathAnalysis = `You sought professional help and ultimately chose to come out. This path shows courage, but also reveals how much support and resources matter. Your ability to access therapy and take the risk of coming out was shaped by your background—some have these options, others don't. Your journey highlights both individual agency and structural privilege.`;
+            } else if (talkedToFriend && joinedCommunity) {
+                pathAnalysis = `You found support through friends and community. This path shows the importance of chosen family and community support, but also reveals how access to accepting communities varies dramatically based on geography, culture, and social networks. Your ability to find this support was shaped by factors beyond your control.`;
+            } else if (livedInauthentically) {
+                pathAnalysis = `Your journey led you to continue living inauthentically, conforming to expectations. This path powerfully demonstrates how "choice" becomes meaningless when the alternative means losing everything. Your decision to conform wasn't weakness—it was a response to structural constraints that made authenticity too costly.`;
+            } else if (exploredAlone && !soughtTherapy) {
+                pathAnalysis = `You navigated this journey largely alone, without professional support. This path reveals how access to resources—therapy, support groups, safe spaces—is not equally available to everyone. Your gender, culture, and family background shaped not just your choices, but your access to the tools that could help you navigate them.`;
+            } else {
+                pathAnalysis = `Your specific path through this narrative reveals unique intersections of constraint and possibility. The choices you made were shaped by the options available to you—options that were themselves determined by your gender, culture, and family expectations. Every decision point in your journey was filtered through these social structures.`;
+            }
+            
+            // Final reflection based on combination
+            if (gameState.culture === 'conservative' && gameState.familyExpectation === 3) {
+                finalReflection = `Your specific combination—${genderText[gameState.gender]} in a conservative religious environment with high family expectations—created particularly severe constraints. The intersection of gender norms, religious teachings, and family pressure created a narrow path where authenticity came at enormous cost. Your journey highlights how these forces compound, making "personal choice" almost impossible.`;
+            } else if (gameState.culture === 'liberal' && gameState.familyExpectation === 1) {
+                finalReflection = `Your combination—${genderText[gameState.gender]} in a liberal secular environment with low family expectations—gave you more privilege than most. You had more freedom to explore, but this journey has shown you how even in accepting environments, social structures still shape identity and choice. Recognizing this privilege is crucial for understanding the struggles of those with less freedom.`;
+            } else {
+                finalReflection = `Your specific combination of background factors created a unique landscape of constraints and possibilities. The intersection of your gender, culture, and family expectations shaped not just your options, but your understanding of what was even possible. This reveals how personal choice is always contextual, always shaped by forces beyond individual will.`;
+            }
+            
             summary.innerHTML = `
                 <h2>Reflection: The Illusion of Choice</h2>
                 <p>As a ${genderText[gameState.gender]} from a ${cultureText[gameState.culture]} background, with ${expectationText[gameState.familyExpectation - 1]} family expectations, your journey reveals a fundamental truth: personal choice is never purely personal.</p>
-                <p><strong>Gender shaped your path:</strong> As a ${genderText[gameState.gender]}, you faced specific expectations, judgments, and constraints. Your gender identity determined how others perceived your choices, what was considered "appropriate," and what risks you faced.</p>
-                <p><strong>Culture constrained your options:</strong> Your ${cultureText[gameState.culture]} background created a framework of acceptable and unacceptable choices. Religious teachings, cultural norms, and community values didn't just influence you—they fundamentally limited what you could safely explore.</p>
-                <p><strong>Family expectations created consequences:</strong> With ${expectationText[gameState.familyExpectation - 1]} family expectations, every choice carried the weight of potential rejection, disappointment, or loss. The "freedom" to choose was always conditional.</p>
+                <p><strong>How Gender Shaped Your Path:</strong> ${genderImpact}</p>
+                <p><strong>How Culture Constrained Your Options:</strong> ${cultureImpact}</p>
+                <p><strong>How Family Expectations Created Consequences:</strong> ${expectationImpact}</p>
+                <p><strong>Your Specific Journey:</strong> ${pathAnalysis}</p>
+                <p><strong>What This Reveals:</strong> ${finalReflection}</p>
                 <p>This narrative isn't about individual failure or success. It's about recognizing that sexuality and identity are shaped by forces beyond personal will. True freedom requires not just individual courage, but social change—challenging the structures that make authenticity a privilege rather than a right.</p>
             `;
             
