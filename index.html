@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choices: A Narrative Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .range-value {
+            text-align: center;
+            margin-top: 5px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .story-content {
+            display: none;
+        }
+
+        .story-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 30px;
+            min-height: 150px;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .choice-btn {
+            background: #f5f5f5;
+            color: #333;
+            text-align: left;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .choice-btn:hover {
+            background: #e8e8e8;
+            border-color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .restart-btn {
+            background: #666;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            background: #555;
+        }
+
+        .summary {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-top: 20px;
+        }
+
+        .summary h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .summary p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .story-text {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Choices: A Narrative Journey</h1>
+        <p class="subtitle">Explore how personal choices are shaped by social forces</p>
+
+        <!-- Character Selection Form -->
+        <div id="character-selection">
+            <div class="form-group">
+                <label for="gender">Gender Identity:</label>
+                <select id="gender">
+                    <option value="man">Man</option>
+                    <option value="woman">Woman</option>
+                    <option value="non-binary">Non-Binary</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="culture">Cultural Background:</label>
+                <select id="culture">
+                    <option value="conservative">Conservative Religious</option>
+                    <option value="moderate">Moderate Traditional</option>
+                    <option value="liberal">Liberal Secular</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="family-expectation">Family Expectation Level:</label>
+                <input type="range" id="family-expectation" min="1" max="3" value="2">
+                <div class="range-labels">
+                    <span>Low</span>
+                    <span>Medium</span>
+                    <span>High</span>
+                </div>
+                <div class="range-value" id="expectation-value">Medium</div>
+            </div>
+
+            <button onclick="startStory()">Begin Your Journey</button>
+        </div>
+
+        <!-- Story Content -->
+        <div id="story-content" class="story-content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="story-text" id="story-text"></div>
+            <div class="choices" id="choices"></div>
+            <button class="restart-btn" onclick="restart()">Restart</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state object - stores player choices and current story node
+        let gameState = {
+            gender: null,
+            culture: null,
+            familyExpectation: null,
+            currentNode: 0,
+            path: []
+        };
+
+        // Story nodes - each node has text and choices
+        // The text and choices adapt based on player background
+        const storyNodes = [
+            {
+                // Node 0: Introduction
+                getText: (state) => {
+                    const genderText = {
+                        'man': 'As a man',
+                        'woman': 'As a woman',
+                        'non-binary': 'As a non-binary person'
+                    };
+                    return `${genderText[state.gender]}, you've reached a point in your life where you're questioning your identity and desires. The expectations around you feel heavy, but you're trying to understand what you truly want.`;
+                },
+                choices: [
+                    { text: 'Explore your feelings privately', next: 1 },
+                    { text: 'Talk to a close friend', next: 2 },
+                    { text: 'Seek professional guidance', next: 3 }
+                ]
+            },
+            {
+                // Node 1: Private exploration
+                getText: (state) => {
+                    if (state.culture === 'conservative' && state.familyExpectation === 3) {
+                        return 'You try to explore your feelings alone, but guilt and fear creep in. Every thought feels like a betrayal of what you were taught. The isolation makes it harder to understand yourself clearly.';
+                    } else if (state.gender === 'woman' && state.culture === 'conservative') {
+                        return 'As a woman in a conservative environment, exploring privately feels safer, but also lonely. You wonder if your feelings are valid or just confusion. The silence around these topics makes it hard to find clarity.';
+                    } else {
+                        return 'You spend time reflecting on your feelings. It\'s confusing but also freeing to have this space. However, you realize you might need support to truly understand yourself.';
+                    }
+                },
+                choices: [
+                    { text: 'Continue exploring alone', next: 4 },
+                    { text: 'Reach out to someone', next: 2 }
+                ]
+            },
+            {
+                // Node 2: Talking to a friend
+                getText: (state) => {
+                    if (state.gender === 'man' && state.culture === 'conservative') {
+                        return 'You confide in a friend. They listen, but you notice their discomfort. "Are you sure?" they ask. "Maybe it\'s just a phase." Their reaction makes you question yourself more than before.';
+                    } else if (state.familyExpectation === 3) {
+                        return 'Your friend is supportive, but warns you: "Be careful who you tell. Your family might not understand." The weight of potential consequences hangs over your conversation.';
+                    } else {
+                        return 'Your friend listens with empathy. They don\'t have all the answers, but having someone to talk to helps. You feel less alone in your journey.';
+                    }
+                },
+                choices: [
+                    { text: 'Ask them to keep it secret', next: 5 },
+                    { text: 'Feel encouraged to explore more', next: 6 }
+                ]
+            },
+            {
+                // Node 3: Professional guidance
+                getText: (state) => {
+                    if (state.culture === 'conservative' && state.familyExpectation >= 2) {
+                        return 'You find a therapist, but worry about your family finding out. The sessions help, but you\'re constantly aware of the cultural and religious teachings that conflict with what you\'re discovering about yourself.';
+                    } else if (state.gender === 'non-binary') {
+                        return 'Finding a therapist who understands non-binary experiences is challenging. Some try to fit you into binary categories. You realize how much society\'s structures shape even professional help.';
+                    } else {
+                        return 'Therapy provides a safe space to explore. Your therapist helps you understand that your feelings are valid, regardless of external expectations.';
+                    }
+                },
+                choices: [
+                    { text: 'Continue therapy', next: 7 },
+                    { text: 'Try a different approach', next: 1 }
+                ]
+            },
+            {
+                // Node 4: Continued isolation
+                getText: (state) => {
+                    if (state.gender === 'woman' && state.culture === 'conservative') {
+                        return 'The isolation deepens. As a woman, you\'ve been taught that your desires should be secondary to family honor. Every thought feels like a secret rebellion. You wonder if you\'ll ever be able to be yourself.';
+                    } else if (state.familyExpectation === 3) {
+                        return 'Alone with your thoughts, the pressure builds. You realize how much your family\'s expectations have shaped what you thought were "your" choices. The line between who you are and who you\'re supposed to be blurs.';
+                    } else {
+                        return 'Time alone helps, but you start to see how your background has limited your understanding of what\'s possible. You realize you need community to truly explore your identity.';
+                    }
+                },
+                choices: [
+                    { text: 'Join an online community', next: 8 },
+                    { text: 'Keep struggling alone', next: 9 }
+                ]
+            },
+            {
+                // Node 5: Keeping secrets
+                getText: (state) => {
+                    if (state.culture === 'conservative') {
+                        return 'You ask your friend to keep it secret. They agree, but you both know the stakes. In your community, being discovered could mean social ostracization, family conflict, or worse. The secrecy becomes another burden.';
+                    } else if (state.familyExpectation >= 2) {
+                        return 'The secrecy feels necessary but also painful. You realize how much your choices are constrained by fear of disappointing your family. Is this really a "choice" when the consequences are so severe?';
+                    } else {
+                        return 'Keeping it secret feels safer for now, but you wonder how long you can live this way. The weight of hiding part of yourself grows heavier.';
+                    }
+                },
+                choices: [
+                    { text: 'Decide to come out to family', next: 10 },
+                    { text: 'Continue living in secret', next: 9 }
+                ]
+            },
+            {
+                // Node 6: Feeling encouraged
+                getText: (state) => {
+                    if (state.gender === 'man' && state.culture === 'moderate') {
+                        return 'Feeling encouraged, you start exploring more openly. However, you notice subtle reactions - people treating you differently, assumptions about your masculinity. The social costs become clearer.';
+                    } else if (state.culture === 'liberal') {
+                        return 'With support, you feel more free to explore. Your environment is more accepting, and you realize how much privilege this represents. Not everyone has this space.';
+                    } else {
+                        return 'The encouragement helps, but you\'re still navigating a world that wasn\'t built for people like you. Every step forward requires courage.';
+                    }
+                },
+                choices: [
+                    { text: 'Attend a support group', next: 8 },
+                    { text: 'Start dating', next: 11 }
+                ]
+            },
+            {
+                // Node 7: Continuing therapy
+                getText: (state) => {
+                    if (state.gender === 'woman' && state.familyExpectation === 3) {
+                        return 'Therapy helps, but you\'re torn. As a woman with high family expectations, you\'re supposed to marry, have children, maintain the family\'s honor. Your authentic self conflicts with these roles. The therapist validates your feelings, but can\'t change your reality.';
+                    } else if (state.culture === 'conservative') {
+                        return 'Therapy reveals how deeply cultural and religious teachings have shaped your self-perception. You begin to separate what you\'ve been taught from what you actually feel. It\'s painful but liberating.';
+                    } else {
+                        return 'Therapy provides tools to navigate your journey. You learn that your identity is valid, and that you have the right to explore and define yourself.';
+                    }
+                },
+                choices: [
+                    { text: 'Make a decision about your identity', next: 12 },
+                    { text: 'Take more time to explore', next: 6 }
+                ]
+            },
+            {
+                // Node 8: Online community
+                getText: (state) => {
+                    if (state.culture === 'conservative') {
+                        return 'You find an online community, but you use a pseudonym. Even in digital spaces, you can\'t fully be yourself because of the risk of being discovered. The anonymity helps, but also highlights how constrained your life has become.';
+                    } else if (state.gender === 'non-binary') {
+                        return 'Connecting with others who share your experience is transformative. You realize you\'re not alone, and that your identity is valid. However, you also see how much harder it is for non-binary people in a binary world.';
+                    } else {
+                        return 'The community provides support and understanding. You see how different people navigate similar challenges, and realize how much your background has shaped your options.';
+                    }
+                },
+                choices: [
+                    { text: 'Become more active in the community', next: 13 },
+                    { text: 'Use this support to make life changes', next: 12 }
+                ]
+            },
+            {
+                // Node 9: Struggling alone
+                getText: (state) => {
+                    if (state.familyExpectation === 3) {
+                        return 'The struggle continues. You realize that "choosing" to hide is not really a choice when the alternative means losing your family, your community, your entire support system. The weight of expectations crushes your sense of agency.';
+                    } else if (state.gender === 'woman' && state.culture === 'conservative') {
+                        return 'Alone, you grapple with the conflict between your desires and your role as a woman in your community. You\'re supposed to be pure, modest, and focused on family. Your authentic self doesn\'t fit this mold, and the isolation is crushing.';
+                    } else {
+                        return 'The isolation takes its toll. You realize that personal choice is never truly personal - it\'s always shaped by what\'s acceptable, what\'s safe, what\'s possible in your context.';
+                    }
+                },
+                choices: [
+                    { text: 'Reach a breaking point', next: 10 },
+                    { text: 'Continue living inauthentically', next: 14 }
+                ]
+            },
+            {
+                // Node 10: Coming out decision
+                getText: (state) => {
+                    if (state.culture === 'conservative' && state.familyExpectation === 3) {
+                        return 'You decide to come out to your family. The reaction is devastating. They see it as a betrayal, a rejection of everything they taught you. You\'re told you\'re choosing to sin, to dishonor the family. The "choice" to be yourself comes at an enormous cost.';
+                    } else if (state.familyExpectation >= 2) {
+                        return 'Coming out creates tension. Some family members are accepting, others are not. You realize that your "choice" to be authentic required you to risk relationships that were supposed to be unconditional. The burden of this "choice" weighs heavily.';
+                    } else {
+                        return 'You come out, and while there\'s some discomfort, your family tries to understand. You realize how much easier this is for you than for others in more restrictive environments.';
+                    }
+                },
+                choices: [
+                    { text: 'Continue forward', next: 15 }
+                ]
+            },
+            {
+                // Node 11: Starting to date
+                getText: (state) => {
+                    if (state.gender === 'man' && state.culture === 'conservative') {
+                        return 'You start dating, but you have to be extremely careful. In your community, being discovered could mean violence or complete social exclusion. Every date feels risky. Your "choice" to date is constrained by fear.';
+                    } else if (state.gender === 'woman' && state.culture === 'moderate') {
+                        return 'Dating as a woman in a moderate traditional environment means navigating expectations about modesty, honor, and appropriate behavior. Your choices are constantly judged and constrained.';
+                    } else {
+                        return 'Dating opens new possibilities, but you also see how your background has shaped your understanding of relationships and intimacy.';
+                    }
+                },
+                choices: [
+                    { text: 'Continue exploring relationships', next: 13 },
+                    { text: 'Reflect on what you\'ve learned', next: 15 }
+                ]
+            },
+            {
+                // Node 12: Making a decision
+                getText: (state) => {
+                    if (state.culture === 'conservative') {
+                        return 'You make a decision about your identity, but you realize it\'s not really a "choice" in the way people think. Your options were limited from the start by your culture, religion, and family. What looks like personal freedom is actually navigating within severe constraints.';
+                    } else if (state.gender === 'non-binary') {
+                        return 'You embrace your non-binary identity, but you see how the world isn\'t built for you. Every form, every space, every interaction assumes binary gender. Your "choice" to be yourself requires constant explanation and justification.';
+                    } else {
+                        return 'You make decisions about your identity, but you\'re aware of how much easier this journey has been because of your background. You see the privilege in having more options.';
+                    }
+                },
+                choices: [
+                    { text: 'Reflect on the journey', next: 15 }
+                ]
+            },
+            {
+                // Node 13: Active in community
+                getText: (state) => {
+                    if (state.culture === 'conservative') {
+                        return 'You become more active, but always with caution. You see others who\'ve lost everything for being authentic. The community becomes your chosen family, but you also see how society has forced this choice upon you.';
+                    } else {
+                        return 'Being active in the community helps you understand the broader social forces at play. You see how gender, culture, and family expectations shape everyone\'s journey differently.';
+                    }
+                },
+                choices: [
+                    { text: 'Continue your journey', next: 15 }
+                ]
+            },
+            {
+                // Node 14: Living inauthentically
+                getText: (state) => {
+                    if (state.familyExpectation === 3) {
+                        return 'You continue living inauthentically, conforming to expectations. Years pass. You marry someone you don\'t love, live a life that isn\'t yours. The "choice" to conform wasn\'t really a choice - it was survival. The cost of being yourself was too high.';
+                    } else {
+                        return 'You continue hiding, but the weight grows. You realize that choosing to hide isn\'t really choosing - it\'s being forced into a box by social expectations.';
+                    }
+                },
+                choices: [
+                    { text: 'Reach the end', next: 15 }
+                ]
+            },
+            {
+                // Node 15: Ending/Reflection
+                getText: (state) => {
+                    return 'Your journey reaches a point of reflection.';
+                },
+                choices: []
+            }
+        ];
+
+        // Update range value display
+        document.getElementById('family-expectation').addEventListener('input', function(e) {
+            const value = parseInt(e.target.value);
+            const labels = ['Low', 'Medium', 'High'];
+            document.getElementById('expectation-value').textContent = labels[value - 1];
+        });
+
+        // Start the story after character selection
+        function startStory() {
+            // Get selected values
+            gameState.gender = document.getElementById('gender').value;
+            gameState.culture = document.getElementById('culture').value;
+            gameState.familyExpectation = parseInt(document.getElementById('family-expectation').value);
+            gameState.currentNode = 0;
+            gameState.path = [];
+
+            // Hide character selection, show story
+            document.getElementById('character-selection').style.display = 'none';
+            document.getElementById('story-content').style.display = 'block';
+
+            // Render first node
+            renderNode(0);
+        }
+
+        // Render a story node based on current state
+        function renderNode(nodeIndex) {
+            gameState.currentNode = nodeIndex;
+            gameState.path.push(nodeIndex);
+
+            const node = storyNodes[nodeIndex];
+            
+            // Get dynamic text based on player background
+            const storyText = node.getText(gameState);
+            document.getElementById('story-text').textContent = storyText;
+
+            // Clear previous choices
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+
+            // If this is the end node, show summary
+            if (nodeIndex === 15) {
+                showSummary();
+                return;
+            }
+
+            // Render choices
+            node.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.textContent = choice.text;
+                button.onclick = () => makeChoice(choice.next);
+                choicesContainer.appendChild(button);
+            });
+
+            // Update progress bar (15 nodes total, 0-14 + ending)
+            const progress = ((nodeIndex + 1) / 16) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        // Handle player choice
+        function makeChoice(nextNode) {
+            renderNode(nextNode);
+        }
+
+        // Show reflective summary at the end
+        function showSummary() {
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+
+            const summary = document.createElement('div');
+            summary.className = 'summary';
+            
+            const genderText = {
+                'man': 'man',
+                'woman': 'woman',
+                'non-binary': 'non-binary person'
+            };
+            
+            const cultureText = {
+                'conservative': 'conservative religious',
+                'moderate': 'moderate traditional',
+                'liberal': 'liberal secular'
+            };
+            
+            const expectationText = ['low', 'medium', 'high'];
+            
+            summary.innerHTML = `
+                <h2>Reflection: The Illusion of Choice</h2>
+                <p>As a ${genderText[gameState.gender]} from a ${cultureText[gameState.culture]} background, with ${expectationText[gameState.familyExpectation - 1]} family expectations, your journey reveals a fundamental truth: personal choice is never purely personal.</p>
+                <p><strong>Gender shaped your path:</strong> As a ${genderText[gameState.gender]}, you faced specific expectations, judgments, and constraints. Your gender identity determined how others perceived your choices, what was considered "appropriate," and what risks you faced.</p>
+                <p><strong>Culture constrained your options:</strong> Your ${cultureText[gameState.culture]} background created a framework of acceptable and unacceptable choices. Religious teachings, cultural norms, and community values didn't just influence you—they fundamentally limited what you could safely explore.</p>
+                <p><strong>Family expectations created consequences:</strong> With ${expectationText[gameState.familyExpectation - 1]} family expectations, every choice carried the weight of potential rejection, disappointment, or loss. The "freedom" to choose was always conditional.</p>
+                <p>This narrative isn't about individual failure or success. It's about recognizing that sexuality and identity are shaped by forces beyond personal will. True freedom requires not just individual courage, but social change—challenging the structures that make authenticity a privilege rather than a right.</p>
+            `;
+            
+            document.getElementById('story-text').parentNode.insertBefore(summary, document.getElementById('story-text').nextSibling);
+            
+            // Update progress to 100%
+            document.getElementById('progress-fill').style.width = '100%';
+        }
+
+        // Restart the game
+        function restart() {
+            gameState = {
+                gender: null,
+                culture: null,
+                familyExpectation: null,
+                currentNode: 0,
+                path: []
+            };
+
+            document.getElementById('character-selection').style.display = 'block';
+            document.getElementById('story-content').style.display = 'none';
+            document.getElementById('story-text').textContent = '';
+            document.getElementById('choices').innerHTML = '';
+            document.getElementById('progress-fill').style.width = '0%';
+            
+            // Remove summary if it exists
+            const summary = document.querySelector('.summary');
+            if (summary) {
+                summary.remove();
+            }
+        }
+    </script>
+</body>
+</html>
+
